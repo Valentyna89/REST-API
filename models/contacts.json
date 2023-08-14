@@ -6,10 +6,10 @@
     "phone": "(294) 840-6685"
   },
   {
-    "id": "drsAJ4SHPYqZeG-83QTVW",
-    "name": "Kennedy Lane",
+    "name": "ken Lane",
     "email": "mattis.Cras@nonenimMauris.net",
-    "phone": "(542) 451-7038"
+    "phone": "(542) 451-7039",
+    "id": "drsAJ4SHPYqZeG-83QTVW"
   },
   {
     "id": "vza2RIzNGIwutCVCs4mCL",
@@ -60,12 +60,6 @@
     "phone": "(486) 914-5674"
   },
   {
-    "id": "5d554dcc-9a73-4afa-9534-84cdd371c238",
-    "name": "Kate Ostin",
-    "email": "kateO@gmail.com",
-    "phone": "(486) 914-5674"
-  },
-  {
     "id": "ca354b3d-9675-44cc-a538-bc9ac134b047",
     "name": "Kate Ostin",
     "email": "kateO@gmail.com",
@@ -88,5 +82,11 @@
     "email": "tommy@gmail.com",
     "phone": "(486) 235-9874",
     "id": "5e22f375-b454-424b-b3f5-594c2c0d462c"
+  },
+  {
+    "name": "ken lambo",
+    "email": "lambo.Cras@nonenimMauris.net",
+    "phone": "(542) 451-8235",
+    "id": "4f4ed7ac-8682-4449-8deb-68b50e7c1b79"
   }
 ]
