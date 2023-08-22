@@ -6,4 +6,4 @@ const contactShema = Joi.object({
   phone: Joi.string().min(10).required(),
 });
 
-module.exports = { contactShema };
+module.exports = contactShema;
