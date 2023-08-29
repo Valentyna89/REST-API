@@ -28,7 +28,7 @@ const userSchema = Schema(
 const registerShema = Joi.object({
   password: Joi.string().min(6).required(),
   email: Joi.string().email().required(),
-  subscription: Joi.string().required(),
+  subscription: Joi.string(),
 });
 
 const loginShema = Joi.object({
