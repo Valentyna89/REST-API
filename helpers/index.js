@@ -1,5 +1,5 @@
 const ctrlWrapper = require("./ctrlWrapper");
-const validation = require("./validation");
+const validation = require("../middlewares/validation");
 const RequestError = require("./requestError");
 
 module.exports = { ctrlWrapper, validation, RequestError };

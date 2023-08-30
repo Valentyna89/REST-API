@@ -1,15 +1,15 @@
 const express = require("express");
 const router = express.Router();
 
-const { validation } = require("../../helpers");
+const { validation, auth } = require("../../middlewares");
 const ctrl = require("../../controllers/contacts");
 const { contactShema, favoriteSchema } = require("../../schemas");
 
-router.get("/", ctrl.getContacts);
+router.get("/", auth, ctrl.getContacts);
 
 router.get("/:contactId", ctrl.getContactById);
 
-router.post("/", validation(contactShema), ctrl.addNewContact);
+router.post("/", auth, validation(contactShema), ctrl.addNewContact);
 
 router.delete("/:contactId", ctrl.removeContact);
 
