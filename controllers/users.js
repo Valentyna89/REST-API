@@ -5,6 +5,7 @@ const path = require("path");
 const fs = require("fs/promises");
 const RequestError = require("../helpers/requestError");
 const ctrlWrapper = require("../helpers/ctrlWrapper");
+const Jimp = require("jimp");
 
 const { User } = require("../models");
 
@@ -81,6 +82,12 @@ const logout = async (req, res) => {
 const updateAvatar = async (req, res) => {
   const { _id } = req.user;
   const { path: tempUpload, originalname } = req.file;
+  const image = await Jimp.read(tempUpload);
+  await image
+    .autocrop()
+    .cover(250, 250, Jimp.HORIZONTAL_ALIGN_CENTER | Jimp.VERTICAL_ALIGN_MIDDLE)
+    .writeAsync(tempUpload);
+
   const fileName = `${_id}_${originalname}`;
 
   const resultUpload = path.join(avatarsDir, fileName);
