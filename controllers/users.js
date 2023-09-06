@@ -1,9 +1,15 @@
-const RequestError = require("../helpers/requestError");
-const ctrlWrapper = require("../helpers/ctrlWrapper");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const gravatar = require("gravatar");
+const path = require("path");
+const fs = require("fs/promises");
+const RequestError = require("../helpers/requestError");
+const ctrlWrapper = require("../helpers/ctrlWrapper");
+const Jimp = require("jimp");
 
 const { User } = require("../models");
+
+const avatarsDir = path.join(__dirname, "../", "public", "avatars");
 
 const { SECRET_KEY } = process.env;
 
@@ -14,11 +20,18 @@ const register = async (req, res) => {
     throw RequestError(409, "Email in use");
   }
   const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
-  const newUser = await User.create({ email, password: hashPassword });
+  const avatarURL = gravatar.url(email);
+
+  const newUser = await User.create({
+    email,
+    password: hashPassword,
+    avatarURL,
+  });
   res.status(201).json({
     user: {
       email: newUser.email,
       subscription: newUser.subscription,
+      avatarURL,
     },
   });
 };
@@ -66,9 +79,28 @@ const logout = async (req, res) => {
   res.status(204).json();
 };
 
+const updateAvatar = async (req, res) => {
+  const { _id } = req.user;
+  const { path: tempUpload, originalname } = req.file;
+  const image = await Jimp.read(tempUpload);
+  await image
+    .autocrop()
+    .cover(250, 250, Jimp.HORIZONTAL_ALIGN_CENTER | Jimp.VERTICAL_ALIGN_MIDDLE)
+    .writeAsync(tempUpload);
+
+  const fileName = `${_id}_${originalname}`;
+
+  const resultUpload = path.join(avatarsDir, fileName);
+  await fs.rename(tempUpload, resultUpload);
+  const avatarURL = path.join("public", "avatars", fileName);
+  await User.findByIdAndUpdate(_id, { avatarURL });
+  res.json({ avatarURL });
+};
+
 module.exports = {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
   getCurrent: ctrlWrapper(getCurrent),
   logout: ctrlWrapper(logout),
+  updateAvatar: ctrlWrapper(updateAvatar),
 };
