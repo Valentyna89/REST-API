@@ -18,6 +18,7 @@ const { SECRET_KEY } = process.env;
 const register = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
+
   if (user) {
     throw RequestError(409, "Email in use");
   }
@@ -26,19 +27,22 @@ const register = async (req, res) => {
   const avatarURL = gravatar.url(email);
   const verificationToken = v4();
 
+  const verifyEmail = {
+    to: email,
+    subject: "Verify email",
+    html: `<a target="_blank" href="http://localhost:3000/api/users/verify/${verificationToken}">Click to verify email</a>`,
+  };
+
+  await sendEmail(verifyEmail).catch((error) => {
+    throw RequestError(error.status, "Smth happend");
+  });
+
   const newUser = await User.create({
     email,
     password: hashPassword,
     avatarURL,
     verificationToken,
   });
-
-  const verifyEmail = {
-    to: email,
-    subject: "Verify email",
-    html: `<a target="_blank" href="http://localhost:3000/api/users/verify/${verificationToken}">Click to verify email</a>`,
-  };
-  await sendEmail(verifyEmail);
 
   res.status(201).json({
     user: {
