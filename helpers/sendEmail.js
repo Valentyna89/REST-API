@@ -7,12 +7,12 @@ sgMail.setApiKey(SENDGRID_API_KEY);
 
 const sendEmail = async (data) => {
   return new Promise(function (resolve, reject) {
-    try {
-      const email = { ...data, from: "vale.forstudy@gmail.com" };
-      resolve(email);
-    } catch (error) {
-      reject(error);
-    }
+    const email = { ...data, from: "vale.forstudy@gmail.com" };
+
+    sgMail
+      .send(email)
+      .then((data) => resolve(data))
+      .catch((error) => reject(error));
   });
 };
 

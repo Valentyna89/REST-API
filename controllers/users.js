@@ -8,7 +8,7 @@ const ctrlWrapper = require("../helpers/ctrlWrapper");
 const Jimp = require("jimp");
 const { v4 } = require("uuid");
 
-const { sendEmail } = require("../helpers/sendEmail");
+const sendEmail = require("../helpers/sendEmail");
 const { User } = require("../models");
 
 const avatarsDir = path.join(__dirname, "../", "public", "avatars");
@@ -103,9 +103,9 @@ const login = async (req, res) => {
   if (!user) {
     throw RequestError(401, "Email or password is wrong");
   }
-  // if (!user.verify) {
-  //   throw RequestError(401, "Email is not verified");
-  // }
+  if (!user.verify) {
+    throw RequestError(401, "Email is not verified");
+  }
 
   const passwordCompare = bcrypt.compareSync(password, user.password);
   if (!passwordCompare) {
